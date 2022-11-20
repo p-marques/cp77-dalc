@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<bindings>
+    <!-- inputContexts -->
+    <context name="InteractionActions" append="true">
+        <action name="ChoiceDisassemble_Hold" map="ChoiceDisassemble" priority="-2" />
+    </context>
+
+    <hold action="ChoiceDisassemble_Hold" timeout="0.3" />
+
+    <acceptedEvents action="ChoiceDisassemble_Hold" >
+        <event name="BUTTON_HOLD_COMPLETE" />
+    </acceptedEvents>
+
+    <!-- inputUserMapping -->
+    <mapping name="ChoiceDisassemble" type="Button" >
+        <button id="IK_Z"/>
+        <button id="IK_Pad_DigitLeft" />
+    </mapping>
+</bindings>
