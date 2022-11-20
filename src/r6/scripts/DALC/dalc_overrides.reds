@@ -1,5 +1,5 @@
 // Disassemble As Looting Choice by pMarK
-// v1.2
+// v1.3
 
 module DALC.Overrides
 import DALC.Base.DALC

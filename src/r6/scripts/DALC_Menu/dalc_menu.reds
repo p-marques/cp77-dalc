@@ -9,7 +9,7 @@ public class DALCWithMenu extends DALC {
 
     protected func SetupSettings() -> Void {
         this.menuSettings = new DALCMenuSettings();
-        ModSettings.RegisterListenerToClass(this.menuSettings); // Hard "Mod Settings" dependency
+        ModSettings.RegisterListenerToClass(this.menuSettings);
     }
 
     public func GetIsEnabled() -> Bool {

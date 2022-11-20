@@ -1,5 +1,5 @@
 // Disassemble As Looting Choice by pMarK
-// v1.2
+// v1.3
 
 module DALC.Base
 
@@ -10,6 +10,7 @@ public class DALC {
     private let player: ref<PlayerPuppet>;
     private let blackboard: ref<IBlackboard>;
     private let craftingSystem: ref<CraftingSystem>;
+    private let wardrobeSystem: ref<WardrobeSystem>;
     private let customChoice: InteractionChoiceData;
     private let settings: DALCDefaultSettings;
 
@@ -133,6 +134,8 @@ public class DALC {
 
         this.AwardExperience(listOfIngredients, amount);
 
+        this.HandleWardrobeSystem(itemID);
+
         this.craftingSystem.UpdateBlackboard(CraftingCommands.DisassemblingFinished, itemID, listOfIngredients);
 
         if (this.ShouldPlaySound()) {
@@ -140,8 +143,29 @@ public class DALC {
         }
     }
 
+    private func HandleWardrobeSystem(itemID: ItemID) -> Void {
+        let itemRecord: ref<Item_Record>;
+        let itemData: wref<gameItemData>;
+        let name: String;
+
+        if !IsDefined(this.wardrobeSystem) {
+            this.wardrobeSystem = GameInstance.GetWardrobeSystem(this.gameInstance);
+        }
+
+        if Equals(RPGManager.GetItemCategory(itemID), gamedataItemCategory.Clothing) && !this.wardrobeSystem.IsItemBlacklisted(itemID) {
+            this.wardrobeSystem.StoreUniqueItemIDAndMarkNew(this.gameInstance, itemID);
+
+            itemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(itemID));
+            itemData = RPGManager.GetItemData(this.gameInstance, this.lootingController.GetLootOwner(), itemID);
+
+            name = UIItemsHelper.GetItemName(itemRecord, itemData);
+
+            LogChannel(n"DALC", "Added [" + EnumValueToString("gamedataItemType", Cast<Int64>(EnumInt(itemData.GetItemType()))) + "] " + name);
+        }
+    }
+
     private func AwardExperience(ingredients: array<IngredientData>, amount: Int32) -> Void {
-        RPGManager.AwardXP(this.gameInstance, Cast<Float>(8), gamedataProficiencyType.Crafting);
+        RPGManager.AwardXP(this.gameInstance, 8.0, gamedataProficiencyType.Crafting);
     }
 
     private func IsDisassembleChoiceShowing(data: LootData) -> Bool {
