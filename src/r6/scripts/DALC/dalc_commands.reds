@@ -1,6 +1,3 @@
-// Disassemble As Looting Choice by pMarK
-// v1.3
-
 public static exec func DALCListWardrobe(gi: GameInstance) -> Void {
     let wardrobeSys: wref<WardrobeSystem>;
     let stored: array<ItemID>;

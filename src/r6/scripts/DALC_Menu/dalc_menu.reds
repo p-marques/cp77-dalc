@@ -1,6 +1,3 @@
-// Disassemble As Looting Choice by pMarK
-// v1.2
-
 module DALC.Menu
 import DALC.Base.DALC
 
@@ -9,7 +6,7 @@ public class DALCWithMenu extends DALC {
 
     protected func SetupSettings() -> Void {
         this.menuSettings = new DALCMenuSettings();
-        ModSettings.RegisterListenerToClass(this.menuSettings);
+        DALC_RegisterMenu(this.menuSettings);
     }
 
     public func GetIsEnabled() -> Bool {
@@ -87,4 +84,12 @@ public class DALCMenuSettings {
     @runtimeProperty("ModSettings.displayName", "Legendary")
     @runtimeProperty("ModSettings.description", "Should the disassemble option appear for Legendary items?")
     public let ShowForLegendary: Bool = false;
+}
+
+@if(!ModuleExists("ModSettingsModule"))
+public func DALC_RegisterMenu(listener: ref<IScriptable>) {}
+
+@if(ModuleExists("ModSettingsModule"))
+public func DALC_RegisterMenu(listener: ref<IScriptable>) {
+    ModSettings.RegisterListenerToClass(listener);
 }

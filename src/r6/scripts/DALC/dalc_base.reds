@@ -1,6 +1,3 @@
-// Disassemble As Looting Choice by pMarK
-// v1.3
-
 module DALC.Base
 
 public class DALC {
