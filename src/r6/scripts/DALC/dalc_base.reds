@@ -151,7 +151,7 @@ public class DALC {
     }
 
     private func AwardExperience(ingredients: array<IngredientData>, amount: Int32) -> Void {
-        RPGManager.AwardXP(this.gameInstance, 8.0, gamedataProficiencyType.Crafting);
+        RPGManager.AwardXP(this.gameInstance, 8.0, gamedataProficiencyType.TechnicalAbilitySkill);
     }
 
     private func IsDisassembleChoiceShowing(data: LootData) -> Bool {
