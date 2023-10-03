@@ -141,23 +141,12 @@ public class DALC {
     }
 
     private func HandleWardrobeSystem(itemID: ItemID) -> Void {
-        let itemRecord: ref<Item_Record>;
-        let itemData: wref<gameItemData>;
-        let name: String;
-
         if !IsDefined(this.wardrobeSystem) {
             this.wardrobeSystem = GameInstance.GetWardrobeSystem(this.gameInstance);
         }
 
         if Equals(RPGManager.GetItemCategory(itemID), gamedataItemCategory.Clothing) && !this.wardrobeSystem.IsItemBlacklisted(itemID) {
             this.wardrobeSystem.StoreUniqueItemIDAndMarkNew(this.gameInstance, itemID);
-
-            itemRecord = TweakDBInterface.GetItemRecord(ItemID.GetTDBID(itemID));
-            itemData = RPGManager.GetItemData(this.gameInstance, this.lootingController.GetLootOwner(), itemID);
-
-            name = UIItemsHelper.GetItemName(itemRecord, itemData);
-
-            LogChannel(n"DALC", "Added [" + EnumValueToString("gamedataItemType", Cast<Int64>(EnumInt(itemData.GetItemType()))) + "] " + name);
         }
     }
 

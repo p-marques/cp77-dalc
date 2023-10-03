@@ -1,9 +1,6 @@
 module DALC.Overrides
 import DALC.Base.DALC
 
-@if(ModuleExists("DALC.Menu"))
-import DALC.Menu.DALCWithMenu
-
 @addField(LootingController)
 private let disassembleAsLootingOptionMod: ref<DALC>;
 
@@ -23,12 +20,6 @@ private final func RefreshChoicesPool(choices: script_ref<array<InteractionChoic
     wrappedMethod(this.m_currendData.choices);
 }
 
-@if(ModuleExists("DALC.Menu"))
-@addMethod(LootingController)
-private func InitializeDALC() -> Void {
-    this.disassembleAsLootingOptionMod = new DALCWithMenu();
-}
-@if(!ModuleExists("DALC.Menu"))
 @addMethod(LootingController)
 private func InitializeDALC() -> Void {
     this.disassembleAsLootingOptionMod = new DALC();
