@@ -4,6 +4,7 @@ public class DALC {
     private let lootingController: wref<LootingController>;
     private let gameInstance: GameInstance;
     private let dataManager: wref<InventoryDataManagerV2>;
+    private let journalManager: wref<JournalManager>;
     private let player: ref<PlayerPuppet>;
     private let blackboard: ref<IBlackboard>;
     private let craftingSystem: ref<CraftingSystem>;
@@ -20,6 +21,7 @@ public class DALC {
         this.lootingController = lootingController;
         this.gameInstance = gi;
         this.dataManager = dataManager;
+        this.journalManager = GameInstance.GetJournalManager(gi);
         this.craftingSystem = GameInstance.GetScriptableSystemsContainer(gi).Get(n"CraftingSystem") as CraftingSystem;
         this.player = dataManager.GetPlayer();
         this.blackboard = GameInstance.GetBlackboardSystem(gi).Get(GetAllBlackboardDefs().UI_Notifications);
@@ -50,12 +52,16 @@ public class DALC {
         this.settings = DALCDefaultSettings.Initialize(excludedQualities, shouldPlaySound);
     }
 
-    public func GetIsEnabled() -> Bool {
-        return true;
+    public func IsNoTutorial() -> Bool {
+        let objectiveId: String = this.journalManager.GetTrackedEntry().GetId();
+        return
+            NotEquals(objectiveId, "01a_pick_weapon") &&
+            NotEquals(objectiveId, "01c_pick_up_reanimator") &&
+            NotEquals(objectiveId, "03_pick_up_katana");
     }
 
     public func HandleAdditionOfChoiceDisassemble(data: LootData) -> LootData {
-        if this.GetIsEnabled() &&
+        if this.IsNoTutorial() &&
             this.CanCurrentItemBeDisassembled() &&
             !this.lootingController.GetIsLocked() {
             if !this.IsDisassembleChoiceShowing(data) {
@@ -94,7 +100,7 @@ public class DALC {
     }
 
     protected cb func OnAction(action: ListenerAction, consumer: ListenerActionConsumer) -> Bool {
-        if this.GetIsEnabled() &&
+        if this.IsNoTutorial() &&
             Equals(ListenerAction.GetName(action), n"ChoiceDisassemble_Hold") &&
             Equals(ListenerAction.GetType(action), gameinputActionType.BUTTON_HOLD_COMPLETE) {
             let itemData: InventoryItemData = this.lootingController.GetCurrentItem();
